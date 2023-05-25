@@ -5,41 +5,38 @@ import UserContext from './User-context'
 const TodosContext = createContext();
 
 function Provider({children}) {
-const  {user} = useContext(UserContext)  
+  const {user} = useContext(UserContext)
 
-let email = user.email 
-
-const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([]);
 
   const fetchTodos = async () => {
-   const response = await axios.get("http://localhost:3001/todos");
+    const response = await axios.get("http://localhost:3001/todos");
 
-   setTodos(response.data);
-  };	
+    setTodos(response.data);
+  };
 
-const createTodo = async (event, email) => {
-
+  const createTodo = async (event) => {
     const response = await axios.post('http://localhost:3001/todos', {
-        event,
-        email
+      event,
+      email: user.email,
     });
-      const updatedTodos = [
-      ...todos, 
+    const updatedTodos = [
+      ...todos,
       response.data
     ]
     setTodos(updatedTodos);
   };
 
   const editTodos = async (id, newTitle) => {
-   const response = await axios.put(`http://localhost:3001/todos/${id}`, {
-     event: newTitle
-   });
+    const response = await axios.put(`http://localhost:3001/todos/${id}`, {
+      event: newTitle
+    });
 
     const updatedTodos = todos.map((todo) => {
-        if (todo.id === id) {
-            return {...todo, ...response.data }
-        }
-        return todo;
+      if (todo.id === id) {
+        return {...todo, ...response.data}
+      }
+      return todo;
     })
 
     setTodos(updatedTodos)
@@ -48,28 +45,28 @@ const createTodo = async (event, email) => {
 
   const deleteTodos = async (id) => {
     await axios.delete(`http://localhost:3001/todos/${id}`);
-    
+
     const newTodos = todos.filter((todo) => {
-         return todo.id !== id;
-      })
+      return todo.id !== id;
+    })
     setTodos(newTodos)
-    }   	
+  }
 
-    const valueToShare ={
-    	fetchTodos,
-    	createTodo,
-    	editTodos,
-    	deleteTodos,
-    	todos
-    }
+  const valueToShare = {
+    fetchTodos,
+    createTodo,
+    editTodos,
+    deleteTodos,
+    todos
+  }
 
-console.log(valueToShare)
+  console.log(valueToShare)
 
   return (
     <TodosContext.Provider value={valueToShare}>
-      { children}
+      {children}
     </TodosContext.Provider>
-  )    
+  )
 }
 
 

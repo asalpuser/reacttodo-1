@@ -1,10 +1,10 @@
 import {useEffect, useState, useContext} from 'react';
 import jwt_decode from 'jwt-decode';
-import UserContext from ' ../context/User-context';
+import UserContext from '../context/User-context';
 
 function Login() {
-  const {handleCallbackResponse} = useContext(UserContext);
- 
+  const {handleCallbackResponse, user} = useContext(UserContext);
+
   const {handleSignOut} = useContext(UserContext);
 
   useEffect(() => {
@@ -20,12 +20,12 @@ function Login() {
       {theme: 'outline', size: 'large'}
     );
   }, []);
- 
-  //if we have no user: show sign in button
-  // if we have a user: show the log out button 
- 
 
-  return (  
+  //if we have no user: show sign in button
+  // if we have a user: show the log out button
+
+
+  return (
     <div className="App">
       <div id="signInDiv"></div>
       { Object.keys(user).length != 0 &&
@@ -37,8 +37,8 @@ function Login() {
           <h3>{user.name}</h3>
           <h3>{user.email}</h3>
         </div>
-      }         
-    </div>    
+      }
+    </div>
   );
 }
 
